@@ -28,6 +28,11 @@ class Instructor extends Person {
     }
     demo(subject) {console.log(`Today we are learning about ${subject}`)}
     grade(student, subject) {console.log(`${student.name} receives a perfect score on ${subject}`)}
+    regrade(student) {
+        // change student grade random integer in range (-20, +20)
+        student.grade = Math.min(Math.max(student.grade + Math.floor(Math.random()*41-20), 0), 100)
+        //console.log(`${this.name} changed ${student.name}'s grade`)
+    } 
 }
 
 console.log('\nInstructor 1') // spacing sections
@@ -58,13 +63,14 @@ testInstructorTwo.demo('Art')
 class Student extends Person {
     constructor(obj) {
         super(obj)
-        for (let key of [`previousBackground`, `className`, `favSubjects`]) {
+        for (let key of [`previousBackground`, `className`, `favSubjects`, 'grade']) {
             this[key] = obj[key]
         }
     }
     listsSubjects() {this.favSubjects.forEach(e=>{console.log(e)})} //console.log(this.favSubjects.join('\n'))
     PRAssignment(subject) {console.log(`${this.name} has submitted a PR for ${subject}`)}
     sprintChallenge(subject) {console.log(`${this.name} has begun sprint challenge on ${subject}`)}
+    graduate() {if (this.grade >= 70) return `${this.name} is graduating with a grade of ${this.grade}%`}
 }
 
 console.log('\nStudent 1') // spacing sections
@@ -74,7 +80,8 @@ const testStudentOne = new Student({
     location: 'Neptune', 
     previousBackground: 'Math', 
     className: 'Freshman', 
-    favSubjects: ['Math', 'Science']
+    favSubjects: ['Math', 'Science'],
+    grade: 60
 })
 testStudentOne.speak()
 testStudentOne.listsSubjects()
@@ -89,7 +96,8 @@ const testStudentTwo = new Student({
     location: 'Uranus', 
     previousBackground: 'Science', 
     className: 'Senior', 
-    favSubjects: ['P.E.']
+    favSubjects: ['P.E.'],
+    grade: 60
 })
 testStudentTwo.speak()
 testStudentTwo.listsSubjects()
@@ -142,3 +150,20 @@ testProjectManagersTwo.demo('Art')
 testProjectManagersTwo.standUp('#web23_PM_Test_2')
 testProjectManagersTwo.debugsCode(testStudentTwo, 'Math')
 testProjectManagersTwo.grade(testStudentTwo, 'Math')
+
+// stretch
+
+console.log('\nGraduation') // spacing sections
+let tests = 0
+while(!testStudentOne.graduate()) {
+    testInstructorOne.regrade(testStudentOne)
+    tests++
+}
+console.log(`After ${tests} tests,`, testStudentOne.graduate())
+
+tests = 0
+while(!testStudentTwo.graduate()) {
+    testProjectManagersOne.regrade(testStudentTwo)
+    tests++
+}
+console.log(`After ${tests} tests,`, testStudentTwo.graduate())
