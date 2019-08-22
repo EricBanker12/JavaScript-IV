@@ -30,3 +30,28 @@ testInstructorOne.speak()
 testInstructorOne.demo('History')
 testInstructorTwo.speak()
 testInstructorTwo.demo('Art')
+
+class Student extends Person {
+    constructor(obj) {
+        super(obj)
+        for (let key of [`previousBackground`, `className`, `favSubjects`]) {
+            this[key] = obj[key]
+        }
+    }
+    listsSubjects() {this.favSubjects.forEach(e=>{console.log(e)})} //console.log(this.favSubjects.join('\n'))
+    PRAssignment(subject) {console.log(`student.name has submitted a PR for ${subject}`)}
+    sprintChallenge(subject) {console.log(`student.name has begun sprint challenge on ${subject}`)}
+}
+
+const testStudentOne = new Student({name: 'Test 1', age: 999, location: 'Neptune', previousBackground: 'Math', className: 'Freshman', favSubjects: ['Math', 'Science']})
+const testStudentTwo = new Student({name: 'Test 2', age: 555, location: 'Uranus', previousBackground: 'Science', className: 'Senior', favSubjects: ['P.E.']})
+testStudentOne.speak()
+testStudentOne.listsSubjects()
+testStudentOne.PRAssignment('Math')
+testStudentOne.sprintChallenge('Science')
+testInstructorOne.grade(testStudentOne, 'Science')
+testStudentTwo.speak()
+testStudentTwo.listsSubjects()
+testStudentTwo.PRAssignment('Art')
+testStudentTwo.sprintChallenge('English')
+testInstructorTwo.grade(testStudentTwo, 'English')
