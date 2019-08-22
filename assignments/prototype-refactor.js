@@ -15,13 +15,14 @@
   * dimensions (These represent the character's size in the video game)
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
-const GameObject = function(obj) {
-    for (let key of ['createdAt', 'name', 'dimensions']) {
-        this[key] = obj[key]
+class GameObject {
+    constructor(obj) {
+        for (let key of ['createdAt', 'name', 'dimensions']) {
+            this[key] = obj[key]
+        }
     }
+    destroy() {return `${this.name} was removed from the game.`}
 }
-
-GameObject.prototype.destroy = function() {return `${this.name} was removed from the game.`}
 
 /*
   === CharacterStats ===
@@ -29,15 +30,15 @@ GameObject.prototype.destroy = function() {return `${this.name} was removed from
   * takeDamage() // prototype method -> returns the string '<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
-const CharacterStats = function(obj) {
-    GameObject.call(this, obj)
-    for (let key of ['healthPoints']) {
-        this[key] = obj[key]
+class CharacterStats extends GameObject {
+    constructor(obj) {
+        super(obj)
+        for (let key of ['healthPoints']) {
+            this[key] = obj[key]
+        }
     }
+    takeDamage() {return `${this.name} took damage.`}
 }
-
-CharacterStats.prototype = Object.create(GameObject.prototype)
-CharacterStats.prototype.takeDamage = function() {return `${this.name} took damage.`}
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -49,15 +50,15 @@ CharacterStats.prototype.takeDamage = function() {return `${this.name} took dama
   * should inherit takeDamage() from CharacterStats
 */
 
-const Humanoid = function(obj) {
-    CharacterStats.call(this, obj)
-    for (let key of ['team', 'weapons', 'language']) {
-        this[key] = obj[key]
+class Humanoid extends CharacterStats{
+    constructor(obj) {
+        super(obj)
+        for (let key of ['team', 'weapons', 'language']) {
+            this[key] = obj[key]
+        }
     }
+    greet() {return `${this.name} offers a greeting in ${this.language}.`}
 }
-
-Humanoid.prototype = Object.create(CharacterStats.prototype)
-Humanoid.prototype.greet = function() {return `${this.name} offers a greeting in ${this.language}.`}
  
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -136,23 +137,25 @@ Humanoid.prototype.greet = function() {return `${this.name} offers a greeting in
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
   // Villain
-  const Villain = function(obj) {
-      Humanoid.call(this, obj)
-  }
-  Villain.prototype = Object.create(Humanoid.prototype)
-  Villain.prototype.slap = function(target) {
-      target.healthPoints -= Math.floor(1 + Math.random() * 3) // 1 to 3
-      return target.healthPoints > 0 ? target.takeDamage() : target.destroy()
+  class Villain extends Humanoid {
+      constructor(obj) {
+        super(obj)
+      }
+      slap(target) {
+        target.healthPoints -= Math.floor(1 + Math.random() * 3) // 1 to 3
+        return target.healthPoints > 0 ? target.takeDamage() : target.destroy()
+    }
   }
 
   // Hero
-  const Hero = function(obj) {
-      Humanoid.call(this, obj)
-  }
-  Hero.prototype = Object.create(Humanoid.prototype)
-  Hero.prototype.slap = function(target) {
-      target.healthPoints -= Math.floor(1 + Math.random() * 5) // 1 to 5
-      return target.healthPoints > 0 ? target.takeDamage() : target.destroy()
+  class Hero extends Humanoid {
+      constructor(obj) {
+        super(obj)
+      }
+      slap(target) {
+        target.healthPoints -= Math.floor(1 + Math.random() * 5) // 1 to 5
+        return target.healthPoints > 0 ? target.takeDamage() : target.destroy()
+      }
   }
 
   // Tom
